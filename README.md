@@ -1,2 +1,2 @@
 # asos-scrapper
-Web scrapping of some clothes website
+Web scrapping of books website, scraping quotes
