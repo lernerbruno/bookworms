@@ -1,12 +1,15 @@
 class Quote:
     def __init__(self, quote):
         self.quote = quote
-        self.author = self.__get_author()
-        self.tags = self.__get_tags()
-        self.number_of_likes = self.__get_likes()
-        self.book = self.__get_book()
+        self.author = self.__get_author(quote)
+        self.tags = self.__get_tags(quote)
+        self.number_of_likes = self.__get_likes(quote)
+        self.book = self.__get_book(quote)
 
     def __get_author(self, quote):
+        """
+        Extracts info about author from quote html element
+        """
         text_div = quote.find('div', class_="quoteText")
         author = text_div.find('span', class_="authorOrTitle").text
         return author
@@ -25,7 +28,3 @@ class Quote:
         tags_banner = quote.find('div', class_='quoteFooter')
         tags_list = tags_banner.find_all('a')
         print(tags_list)  # TODO: clean this string
-
-        def __get_book(self, quote):
-            pass
-
