@@ -2,7 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 import quote
 
-
 class Scraper:
     USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' \
                  '(KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36'
@@ -13,6 +12,10 @@ class Scraper:
                                   'html.parser')
 
     def __get_page_content(self, url):
+        """
+        Gets the url and do the request.
+        It returns the whole HTML as string
+        """
         headers = {'user-agent': self.USER_AGENT}
         r = requests.get(url, headers=headers)
         return r.text
@@ -23,6 +26,9 @@ class Scraper:
         return quotes
 
     def __create_quotes_objects(self, quotes):
+        """
+        It iterates over the elements found in HTML and generate Quote objects from them
+        """
         quotes_objects = []
         for quote in quotes:
             new_quote = quote.Quote(quote)
@@ -45,5 +51,8 @@ class Scraper:
         return url_list
 
     def scrap(self):
+        """
+        This function holds the scraping workflow
+        """
         quotes = self.__get_quotes_elements()
         info = self.__create_quotes_objects(quotes)
