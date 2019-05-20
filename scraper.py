@@ -1,5 +1,5 @@
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString
 import quote
 
 class Scraper:
@@ -30,8 +30,8 @@ class Scraper:
         It iterates over the elements found in HTML and generate Quote objects from them
         """
         quotes_objects = []
-        for quote in quotes:
-            new_quote = quote.Quote(quote)
+        for q in quotes:
+            new_quote = quote.Quote(q)
             quotes_objects.append(new_quote)
 
     def __new_url(self, url, page_num):
