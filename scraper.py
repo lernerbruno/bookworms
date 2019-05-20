@@ -53,4 +53,4 @@ class Scraper:
         quotes = self._get_quotes_elements()
         infos = self._create_quotes_objects(quotes)
         for info in infos:
-            print(repr(info))
+            print(info)
