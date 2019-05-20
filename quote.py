@@ -60,12 +60,12 @@ class Quote:
 
     def __repr__(self):
         info = {
-            'content': self.content,
-            'author': self.author,
-            'book_name': self.book_name,
-            'book_link': self.book_link,
-            'likes': self.likes,
-            'tags': self.tags
+            'Content': self.content,
+            'Author': self.author,
+            'Book name': self.book_name,
+            'Book link': self.book_link,
+            'Likes': self.likes,
+            'Tags': self.tags
         }
         representation = ""
         for key, value in info.items():
