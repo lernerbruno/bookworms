@@ -1,6 +1,8 @@
 class Quote:
     HOST = 'https://www.goodreads.com'
     CONTENT_BLACKLIST = ' ”“'
+    REPRESENTATION_FORMAT = '%s: %s\n'
+    QUOTES_REPR_SEPARATOR = '-----------------------------------\n'
 
     def __init__(self, quote):
         self.html_quote = quote
@@ -53,7 +55,22 @@ class Quote:
         tags_banner = self.html_quote.find('div', class_='quoteFooter')
         tags_raw = tags_banner.find_all('a')
         tags = []
-        for tag in tags_raw:    # cleaning the html strings
+        for tag in tags_raw:  # cleaning the html strings
             tags.append(tag.text)
         return tags
 
+    def __repr__(self):
+        info = {
+            'Content': self.content,
+            'Author': self.author,
+            'Book name': self.book_name,
+            'Book link': self.book_link,
+            'Likes': self.likes,
+            'Tags': self.tags
+        }
+        representation = ""
+        for key, value in info.items():
+            representation += self.REPRESENTATION_FORMAT % (key, value)
+        representation += self.QUOTES_REPR_SEPARATOR
+
+        return representation
