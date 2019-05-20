@@ -1,6 +1,7 @@
 class Quote:
     HOST = 'https://www.goodreads.com'
     CONTENT_BLACKLIST = ' ”“'
+    REPRESENTATION_FORMAT = '%s: %s\n'
 
     def __init__(self, quote):
         self.html_quote = quote
@@ -57,3 +58,18 @@ class Quote:
             tags.append(tag.text)
         return tags
 
+    def __repr__(self):
+        info = {
+            'content': self.content,
+            'author': self.author,
+            'book_name': self.book_name,
+            'book_link': self.book_link,
+            'likes': self.likes,
+            'tags': self.tags
+        }
+        representation = ""
+        for key, value in info.items():
+            representation += self.REPRESENTATION_FORMAT % (key, value)
+        representation += '-----------------------------------\n'
+
+        return representation
