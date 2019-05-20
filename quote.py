@@ -2,6 +2,8 @@ class Quote:
     HOST = 'https://www.goodreads.com'
     CONTENT_BLACKLIST = ' ”“'
     REPRESENTATION_FORMAT = '%s: %s\n'
+    QUOTES_REPR_SEPARATOR = '-----------------------------------\n'
+
 
     def __init__(self, quote):
         self.html_quote = quote
@@ -70,6 +72,6 @@ class Quote:
         representation = ""
         for key, value in info.items():
             representation += self.REPRESENTATION_FORMAT % (key, value)
-        representation += '-----------------------------------\n'
+        representation += self.QUOTES_REPR_SEPARATOR
 
         return representation
