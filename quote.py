@@ -23,12 +23,19 @@ class Quote:
         likes = int(likes.split()[0])
         return likes
 
-    def __get_tags(self, quote):
+    def __get_tags(self, quote):    # TODO Test this function
         """Takes an individualized raw quote and pulls out all of its tags.
         Returns them as a list of strings."""
         tags_banner = quote.find('div', class_='quoteFooter')
-        tags_list = tags_banner.find_all('a')
-        # print(tags_list)  # TODO: clean this string
+        tags_raw = tags_banner.find_all('a')
+        tags = []
+        for tag in tags_raw:    #cleaning the html strings
+            tags.append(tag.text)
+        return tags
+
+        def __get_book(self, quote):
+            pass
+
 
     def __get_content(self, quote):
         """Takes an individualized raw quote and pulls out all of its
