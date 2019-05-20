@@ -4,7 +4,6 @@ class Quote:
     REPRESENTATION_FORMAT = '%s: %s\n'
     QUOTES_REPR_SEPARATOR = '-----------------------------------\n'
 
-
     def __init__(self, quote):
         self.html_quote = quote
         self.content = self._get_content()
@@ -56,7 +55,7 @@ class Quote:
         tags_banner = self.html_quote.find('div', class_='quoteFooter')
         tags_raw = tags_banner.find_all('a')
         tags = []
-        for tag in tags_raw:    # cleaning the html strings
+        for tag in tags_raw:  # cleaning the html strings
             tags.append(tag.text)
         return tags
 
