@@ -12,6 +12,7 @@ class Quote:
         self.book_link = self._get_book_link()
         self.likes = self._get_likes()
         self.tags = self._get_tags()
+        self.picture_url = self._get_pic_url()
 
     def _get_content(self):
         """Takes an individualized raw quote and pulls out all of its
@@ -74,3 +75,8 @@ class Quote:
         representation += self.QUOTES_REPR_SEPARATOR
 
         return representation
+
+    def _get_pic_url(self):
+        """Gets the author's picture URL for an individual quote."""
+        pic_html = self.html_quote.find('img')
+        return pic_html['src']
