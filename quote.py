@@ -12,7 +12,7 @@ class Quote:
         self.book_link = self._get_book_link()
         self.likes = self._get_likes()
         self.tags = self._get_tags()
-        self.picture_url = self._get_pic_url()
+        # self.picture_url = self._get_pic_url()  # TODO: fix the function
         self.info = [self.content, self.author, self.book_name,
                      self.book_link, self.likes, self.tags]
 

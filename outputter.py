@@ -20,7 +20,8 @@ class Outputter:
 
     def _write_to_csv(self):
         """Writes the info of the quotes to a csv file."""
-        with open(self.filename, 'a', newline='') as csv_file:
+        with open(self.filename, 'a', newline='', encoding='utf-8') as \
+                csv_file:
             csv_writer = csv.writer(csv_file)
             if os.stat(self.filename).st_size == 0:  # if the csv file is empty
                 csv_writer.writerow(self.HEADER)
