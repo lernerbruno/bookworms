@@ -1,11 +1,13 @@
 import requests
-from bs4 import BeautifulSoup, NavigableString
+from bs4 import BeautifulSoup
 import quote
 
 
 class Scraper:
-    USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' \
-                 '(KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36'
+    USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' \
+                 ' AppleWebKit/537.36(KHTML, like Gecko) Chrome/74.0.3729.131' \
+                 ' Safari/537.36'
+    PAGE_INDICATOR = '?page='
 
     def __init__(self, root_url):
         self.root_url = root_url
@@ -13,7 +15,7 @@ class Scraper:
                                   'html.parser')
 
     def _get_page_content(self, url):
-        """Gets the url and do the request. 
+        """Gets the url and do the request.
         It returns the whole HTML as string."""
         headers = {'user-agent': self.USER_AGENT}
         r = requests.get(url, headers=headers)
@@ -24,19 +26,18 @@ class Scraper:
         quotes = self.soup.find_all('div', class_='quoteDetails')
         return quotes
 
-    def _create_quotes_objects(self, quotes):
+    def _create_quotes_objects(self, quotes_elements):
         """It iterates over the elements found in HTML and generate 
         Quote objects from them."""
         quotes_objects = []
-        for q in quotes:
-            new_quote = quote.Quote(q)
+        for html_quote in quotes_elements:
+            new_quote = quote.Quote(html_quote)
             quotes_objects.append(new_quote)
         return quotes_objects
 
     def _new_url(self, url, page_num):
         """ Creates a proper URL containing the page number from the input. """
-        page_indicator = '?page='
-        url_new = url + page_indicator + str(page_num)
+        url_new = url + self.PAGE_INDICATOR + str(page_num)
         return url_new
 
     def _iterate_pages(self, url):
@@ -51,7 +52,6 @@ class Scraper:
 
     def scrap(self):
         """This function holds the scraping workflow."""
-        html_quotes = self._get_quotes_elements()
-        detailed_quotes = self._create_quotes_objects(html_quotes)
-        for dq in detailed_quotes:
-            print(dq)
+        quotes_elements = self._get_quotes_elements()
+        quotes_objects = self._create_quotes_objects(quotes_elements)
+        return quotes_objects

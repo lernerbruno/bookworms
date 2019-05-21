@@ -4,8 +4,8 @@ class Quote:
     REPRESENTATION_FORMAT = '%s: %s\n'
     QUOTES_REPR_SEPARATOR = '-----------------------------------\n'
 
-    def __init__(self, quote):
-        self.html_quote = quote
+    def __init__(self, html_quote):
+        self.html_quote = html_quote
         self.content = self._get_content()
         self.author = self._get_author()
         self.book_name = self._get_book_name()
@@ -13,6 +13,8 @@ class Quote:
         self.likes = self._get_likes()
         self.tags = self._get_tags()
         self.picture_url = self._get_pic_url()
+        self.info = [self.content, self.author, self.book_name,
+                     self.book_link, self.likes, self.tags]
 
     def _get_content(self):
         """Takes an individualized raw quote and pulls out all of its
@@ -25,6 +27,9 @@ class Quote:
         """Extracts info about author from quote html element."""
         text_div = self.html_quote.find('div', class_="quoteText")
         author = text_div.find('span', class_="authorOrTitle").text
+        author = author.strip()
+        if author.endswith(','):
+            author = author[:-1]
         return author
 
     def _get_book_name(self):
