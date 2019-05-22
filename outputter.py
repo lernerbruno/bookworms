@@ -23,7 +23,8 @@ class Outputter:
         with open(self.filename, 'a', newline='', encoding='utf-8') as \
                 csv_file:
             csv_writer = csv.writer(csv_file)
-            if os.stat(self.filename).st_size == 0:  # if the csv file is empty
+            if os.stat(self.filename).st_size == 0:  # if the csv file needs
+                # a headers
                 csv_writer.writerow(self.HEADER)
             for quote in self.quotes_objects:
                 csv_writer.writerow(quote.info)

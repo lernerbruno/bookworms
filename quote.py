@@ -1,8 +1,10 @@
 class Quote:
     HOST = 'https://www.goodreads.com'
     CONTENT_BLACKLIST = ' ”“'
+    AUTHOR_BLACKLIST = "\n ,"
     REPRESENTATION_FORMAT = '%s: %s\n'
     QUOTES_REPR_SEPARATOR = '-----------------------------------\n'
+
 
     def __init__(self, html_quote):
         self.html_quote = html_quote
@@ -27,9 +29,7 @@ class Quote:
         """Extracts info about author from quote html element."""
         text_div = self.html_quote.find('div', class_="quoteText")
         author = text_div.find('span', class_="authorOrTitle").text
-        author = author.strip()
-        if author.endswith(','):
-            author = author[:-1]
+        author = author.strip("\n ,")
         return author
 
     def _get_book_name(self):
@@ -48,6 +48,7 @@ class Quote:
             return self.HOST + uri
 
     def _get_likes(self):
+
         """Takes an individualized raw quote, and pulls out how many likes it
         got. Returns an integer."""
         likes_banner = self.html_quote.find('div', class_='right')

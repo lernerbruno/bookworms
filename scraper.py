@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-import quote
+from quote import Quote
 
 
 class Scraper:
@@ -31,13 +31,13 @@ class Scraper:
         Quote objects from them."""
         quotes_objects = []
         for html_quote in quotes_elements:
-            new_quote = quote.Quote(html_quote)
+            new_quote = Quote(html_quote)
             quotes_objects.append(new_quote)
         return quotes_objects
 
     def _new_url(self, url, page_num):
         """ Creates a proper URL containing the page number from the input. """
-        url_new = url + self.PAGE_INDICATOR + str(page_num)
+        url_new = '%s%s%d' % (url, self.PAGE_INDICATOR, page_num)
         return url_new
 
     def _iterate_pages(self, url):
