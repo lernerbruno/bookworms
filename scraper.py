@@ -12,8 +12,8 @@ class Scraper:
 
     def __init__(self, root_url):
         self.root_url = root_url
-        self.soup = BeautifulSoup(self._get_page_content(root_url),
-                                  'html.parser')
+        self.soup = None
+        self.quote_objects = []
 
     def _get_page_content(self, url):
         """Pulls the whole url's HTML as string."""
@@ -29,29 +29,34 @@ class Scraper:
     def _create_quotes_objects(self, quotes_elements):
         """Iterates over the elements found in HTML and generate
         Quote objects from them."""
-        quotes_objects = []
         for html_quote in quotes_elements:
             new_quote = Quote(html_quote)
-            quotes_objects.append(new_quote)
-        return quotes_objects
+            self.quotes_objects.append(new_quote)
 
-    def _new_url(self, url, page_num):
-        """Creates a new proper url containing the page number from the
-        input."""
-        url_new = '%s%s%d' % (url, PAGE_INDICATOR, page_num)
+    def scrap_single_page(self):
+        """This function holds the scraping workflow for 1 page."""
+        quotes_elements = self._get_quotes_elements()
+        self._create_quotes_objects(quotes_elements)
+
+    def _new_url(self, page_num):
+        """ Creates a proper URL containing the page number from the input. """
+        url_new = '%s%s%d' % (self.root_url, self.PAGE_INDICATOR, page_num)
         return url_new
 
-    def _iterate_pages(self, url):
-        """Goes through the numbers from start page to end page and creating a
-        proper url for each page number. Returns a list of all URLs."""
+    def _get_url_list(self):
+        """ Using the new_url function, this function goes through the numbers
+        from 1 to 100 and creates a proper URL for each page number.
+        Returns a list of all URLs. """
         url_list = []
-        for i in range(START_PAGE, END_PAGE + 1):
-            url_new = self._new_url(url, i)
+        for i in range(1, 101):
+            url_new = self._new_url(i)
             url_list.append(url_new)
         return url_list
 
     def scrap(self):
-        """This function holds the scraping workflow."""
-        quotes_elements = self._get_quotes_elements()
-        quotes_objects = self._create_quotes_objects(quotes_elements)
-        return quotes_objects
+        url_list = self._get_url_list()
+        for url in url_list:
+            self.soup = BeautifulSoup(self._get_page_content(url),
+                                      'html.parser')
+            self.scrap_single_page()
+        return self.quote_objects
