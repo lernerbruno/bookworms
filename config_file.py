@@ -1,4 +1,5 @@
-"""A configuration file for Bookworms project."""
+"""A configuration file for Bookworms project.
+Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
 
 # quote
 HOST = 'https://www.goodreads.com'

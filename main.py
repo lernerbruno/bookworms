@@ -1,3 +1,6 @@
+"""The main file of our project.
+Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
+
 from scraper import Scraper
 import outputter
 from config_file import ROOT_URL, OUTPUT_FILENAME

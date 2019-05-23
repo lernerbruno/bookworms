@@ -1,3 +1,6 @@
+"""A file containing the Scraper class and its methods.
+Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
+
 import requests
 from bs4 import BeautifulSoup
 from quote import Quote

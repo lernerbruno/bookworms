@@ -1,3 +1,6 @@
+"""A file containing the Outputter class and its methods.
+Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
+
 import csv
 import os
 from config_file import HEADER, OUTPUT_FILENAME

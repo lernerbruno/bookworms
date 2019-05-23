@@ -1,3 +1,6 @@
+"""A file containing the Quote class and its methods.
+Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
+
 from config_file import CONTENT_BLACKLIST, AUTHOR_BLACKLIST, HOST, \
     REPRESENTATION_FORMAT, QUOTES_REPR_SEPARATOR
 
