@@ -40,7 +40,7 @@ class Scraper:
 
     def _new_url(self, page_num):
         """ Creates a proper URL containing the page number from the input. """
-        url_new = '%s%s%d' % (self.root_url, self.PAGE_INDICATOR, page_num)
+        url_new = '%s%s%d' % (self.root_url, PAGE_INDICATOR, page_num)
         return url_new
 
     def _get_url_list(self):
@@ -48,7 +48,7 @@ class Scraper:
         from 1 to 100 and creates a proper URL for each page number.
         Returns a list of all URLs. """
         url_list = []
-        for i in range(1, 101):
+        for i in range(START_PAGE, END_PAGE + 1):
             url_new = self._new_url(i)
             url_list.append(url_new)
         return url_list
