@@ -13,7 +13,7 @@ class Scraper:
     def __init__(self, root_url):
         self.root_url = root_url
         self.soup = None
-        self.quote_objects = []
+        self.quotes_objects = []
 
     def _get_page_content(self, url):
         """Pulls the whole url's HTML as string."""
@@ -33,10 +33,11 @@ class Scraper:
             new_quote = Quote(html_quote)
             self.quotes_objects.append(new_quote)
 
-    def scrap_single_page(self):
+    def scrap_single_page(self, page_num):
         """This function holds the scraping workflow for 1 page."""
         quotes_elements = self._get_quotes_elements()
         self._create_quotes_objects(quotes_elements)
+        print(f"Scrapped page {page_num}, it got {len(quotes_elements)} quotes")
 
     def _new_url(self, page_num):
         """ Creates a proper URL containing the page number from the input. """
@@ -55,8 +56,11 @@ class Scraper:
 
     def scrap(self):
         url_list = self._get_url_list()
+        i = 1
         for url in url_list:
             self.soup = BeautifulSoup(self._get_page_content(url),
                                       'html.parser')
-            self.scrap_single_page()
-        return self.quote_objects
+            self.scrap_single_page(i)
+            i += 1
+
+        return self.quotes_objects
