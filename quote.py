@@ -1,9 +1,12 @@
+"""A file containing the Quote class and its methods.
+Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
+
+from config_file import CONTENT_BLACKLIST, AUTHOR_BLACKLIST, HOST, \
+    REPRESENTATION_FORMAT, QUOTES_REPR_SEPARATOR
+
+
 class Quote:
-    HOST = 'https://www.goodreads.com'
-    CONTENT_BLACKLIST = ' ”“'
-    AUTHOR_BLACKLIST = "\n ,"
-    REPRESENTATION_FORMAT = '%s: %s\n'
-    QUOTES_REPR_SEPARATOR = '-----------------------------------\n'
+    """Represents an individual quote and stores its relevant information."""
 
     def __init__(self, html_quote):
         self.html_quote = html_quote
@@ -13,25 +16,25 @@ class Quote:
         self.book_link = self._get_book_link()
         self.likes = self._get_likes()
         self.tags = self._get_tags()
-        # self.picture_url = self._get_pic_url()  # TODO: fix the function
+        self.picture_url = self._get_pic_url()
         self.info = [self.content, self.author, self.book_name,
-                     self.book_link, self.likes, self.tags]
+                     self.book_link, self.likes, self.tags, self.picture_url]
 
     def _get_content(self):
-        """Takes an individualized raw quote and pulls out all of its
-        content as a string."""
+        """Gets the quote's content."""
         content = self.html_quote.find('div', class_="quoteText").contents[0]
-        content = content.strip().strip(self.CONTENT_BLACKLIST)
+        content = content.strip().strip(CONTENT_BLACKLIST)
         return content
 
     def _get_author(self):
-        """Extracts info about author from quote html element."""
+        """Gets the name of the author for an individual quote."""
         text_div = self.html_quote.find('div', class_="quoteText")
         author = text_div.find('span', class_="authorOrTitle").text
-        author = author.strip(self.AUTHOR_BLACKLIST)
+        author = author.strip(AUTHOR_BLACKLIST)
         return author
 
     def _get_book_name(self):
+        """Gets the book's name for an individual quote."""
         book_html = self.html_quote.find('a', class_="authorOrTitle")
         if book_html is None:
             return 'No book mentioned'
@@ -39,30 +42,30 @@ class Quote:
             return book_html.text
 
     def _get_book_link(self):
+        """Gets the book's link for an individual quote."""
         book_html = self.html_quote.find('a', class_="authorOrTitle")
         if book_html is None:
             return 'No book mentioned'
         else:
             uri = book_html['href']
-            return self.HOST + uri
+            return HOST + uri
 
     def _get_likes(self):
-        """Takes an individualized raw quote, and pulls out how many likes it
-        got. Returns an integer."""
+        """Gets the number of likes for an individual quote."""
         likes_banner = self.html_quote.find('div', class_='right')
         likes = likes_banner.a.text
         likes = int(likes.split()[0])
         return likes
 
     def _get_tags(self):
-        """Takes an individualized raw quote and pulls out all of its tags.
-        Returns them as a list of strings."""
+        """Gets the tags for an individual quote. Returns them as a list
+        of strings."""
         tags_banner = self.html_quote.find('div', class_='quoteFooter')
         tags_raw = tags_banner.find_all('a')
         tags = []
         for tag in tags_raw:  # cleaning the html strings
             tags.append(tag.text)
-        return tags
+        return tags[:-1]
 
     def __repr__(self):
         info = {
@@ -75,8 +78,8 @@ class Quote:
         }
         representation = ""
         for key, value in info.items():
-            representation += self.REPRESENTATION_FORMAT % (key, value)
-        representation += self.QUOTES_REPR_SEPARATOR
+            representation += REPRESENTATION_FORMAT % (key, value)
+        representation += QUOTES_REPR_SEPARATOR
 
         return representation
 
@@ -84,5 +87,6 @@ class Quote:
         """Gets the author's picture URL for an individual quote."""
         pic_html = self.html_quote.find('img')
         if pic_html is None:
-            pic_html = 'No picture found.' # If needed, we can later change it to NaN or None.
+            pic_html = 'No picture found.'  # If needed, we can later change
+            # it to NaN or None.
         return pic_html['src']

@@ -1,17 +1,17 @@
-import scraper
-import outputter
+"""The main file of our project.
+Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
 
-ROOT_URL = 'https://www.goodreads.com/quotes/recently_added'
+from scraper import Scraper
+import outputter
+from config_file import ROOT_URL, OUTPUT_FILENAME
 
 
 def main():
-    scraper_agent = scraper.Scraper(ROOT_URL)
+    scraper_agent = Scraper(ROOT_URL)
     quotes_objects = scraper_agent.scrap()
-    filename = 'books_quotes.csv'
-    file_writer = outputter.Outputter(filename, 'csv', quotes_objects)
-    # file_writer._write_file()
+    file_writer = outputter.Outputter(OUTPUT_FILENAME, 'csv', quotes_objects)
+    file_writer.write_file()
 
 
 if __name__ == '__main__':
-    # put asserts here
     main()
