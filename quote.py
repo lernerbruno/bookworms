@@ -60,12 +60,14 @@ class Quote:
     def _get_tags(self):
         """Gets the tags for an individual quote. Returns them as a list
         of strings."""
-        tags_banner = self.html_quote.find('div', class_='quoteFooter')
+        tags_banner = self.html_quote.find('div', class_='greyText')
+        if tags_banner is None:
+            return 'No tags found.'
         tags_raw = tags_banner.find_all('a')
         tags = []
         for tag in tags_raw:  # cleaning the html strings
             tags.append(tag.text)
-        return tags[:-1]
+        return tags
 
     def __repr__(self):
         info = {
