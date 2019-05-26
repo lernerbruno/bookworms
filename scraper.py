@@ -56,11 +56,11 @@ class Scraper:
 
     def scrap(self):
         url_list = self._get_url_list()
-        i = 1
+        current_page_num = START_PAGE
         for url in url_list:
             self.soup = BeautifulSoup(self._get_page_content(url),
                                       'html.parser')
-            self.scrap_single_page(i)
-            i += 1
+            self.scrap_single_page(current_page_num)
+            current_page_num += 1
 
         return self.quotes_objects
