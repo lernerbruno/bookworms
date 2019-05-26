@@ -19,8 +19,7 @@ class Outputter:
         specified file type."""
         if self.file_type == 'csv':
             self._write_to_csv()
-        if self.file_type == 'txt':
-            pass
+        # Other relevant file types can be added here in the future
 
     def _write_to_csv(self):
         """Writes the info of each entry to a csv file."""
