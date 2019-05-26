@@ -87,6 +87,6 @@ class Quote:
         """Gets the author's picture URL for an individual quote."""
         pic_html = self.html_quote.find('img')
         if pic_html is None:
-            pic_html = 'No picture found.'  # If needed, we can later change
+            return 'No picture found.'  # If needed, we can later change
             # it to NaN or None.
         return pic_html['src']
