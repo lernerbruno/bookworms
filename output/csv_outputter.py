@@ -5,13 +5,15 @@ import csv
 import os
 from config_file import HEADER
 from output import outputter
+from config_file import OUTPUT_FILENAME
 
 
 class CSVOutputter(outputter.Outputter):
     """Used to output the content to a specified file."""
 
-    def __init__(self, file_type, quotes_objects):
-        super().__init__(file_type, quotes_objects)
+    def __init__(self, quotes_objects):
+        super().__init__(quotes_objects)
+        self.filename = OUTPUT_FILENAME + '.csv'
 
     def write_output(self):
         """Writes the info of each entry to a csv file."""
