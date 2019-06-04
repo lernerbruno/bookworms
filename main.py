@@ -2,7 +2,7 @@
 Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
 
 from scraper import Scraper
-import outputter
+from output import outputter
 from config_file import ROOT_URL
 import argparse
 
@@ -23,6 +23,8 @@ def parsing_args():
 
     args = parser.parse_args()
     return args
+from output import outputter
+from config_file import ROOT_URL, OUTPUT_FILENAME
 
 
 def main():
