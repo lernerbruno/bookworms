@@ -1,9 +1,7 @@
 """A file containing the Outputter class and its methods.
 Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
 
-import csv
-import os
-from config_file import HEADER
+from config_file import OUTPUT_FILENAME
 import abc
 
 
@@ -16,23 +14,5 @@ class Outputter:
         self.quotes_objects = quotes_objects
 
     @abc.abstractmethod
-    def create_output(self):
+    def write_output(self):
         """This is an abstract method that will create the output accordingly to the type"""
-
-    def write_file(self):
-        """Writes the info of each entry to a file according to the
-        specified file type."""
-        if self.file_type == 'csv':
-            self._write_to_csv()
-        # Other relevant file types can be added here in the future
-
-    def _write_to_csv(self):
-        """Writes the info of each entry to a csv file."""
-        with open(self.filename, 'a', newline='', encoding='utf-8') as \
-                csv_file:
-            csv_writer = csv.writer(csv_file)
-            if os.stat(self.filename).st_size == 0:  # if the csv file needs
-                # a headers
-                csv_writer.writerow(HEADER)
-            for quote in self.quotes_objects:
-                csv_writer.writerow(quote.info)

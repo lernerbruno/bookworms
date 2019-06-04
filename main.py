@@ -2,7 +2,7 @@
 Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
 
 from scraper import Scraper
-from output import outputter
+from output import csv_outputter, db_outputter
 from config_file import ROOT_URL
 import argparse
 
@@ -23,8 +23,6 @@ def parsing_args():
 
     args = parser.parse_args()
     return args
-from output import outputter
-from config_file import ROOT_URL, OUTPUT_FILENAME
 
 
 def main():
@@ -37,8 +35,13 @@ def main():
     # main program
     scraper_agent = Scraper(ROOT_URL, end_page)
     quotes_objects = scraper_agent.scrap()
-    file_writer = outputter.Outputter(output_filename, output_file_format, quotes_objects)
-    file_writer.write_file()
+
+    if OUTPUT_TYPE == 'csv':
+        output_writer = csv_outputter.CSVOutputter(OUTPUT_FILENAME, quotes_objects)
+    if OUTPUT_TYPE == 'db':
+        output_writer = db_outputter.DBOutputter(OUTPUT_FILENAME, quotes_objects)
+
+    output_writer.write_output()
 
 
 if __name__ == '__main__':

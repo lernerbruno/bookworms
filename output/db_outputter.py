@@ -10,5 +10,9 @@ class DBOutputter(outputter.Outputter):
     def __init__(self, file_type, quotes_objects):
         super().__init__(file_type, quotes_objects)
 
-    def create_output(self):
+    def create_db(self):
         pass
+
+    def write_output(self):
+        pass
+
