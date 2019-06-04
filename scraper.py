@@ -4,16 +4,17 @@ Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
 import requests
 from bs4 import BeautifulSoup
 from quote import Quote
-from config_file import USER_AGENT, PAGE_INDICATOR, START_PAGE, END_PAGE
+from config_file import USER_AGENT, PAGE_INDICATOR, START_PAGE
 
 
 class Scraper:
     """Used to scrape a 'goodreads' web page for its book quotes."""
 
-    def __init__(self, root_url):
+    def __init__(self, root_url, end_page):
         self.root_url = root_url
         self.soup = None
         self.quotes_objects = []
+        self.end_page = end_page
 
     def _get_page_content(self, url):
         """Pulls the whole url's HTML as string."""
@@ -49,7 +50,7 @@ class Scraper:
         from 1 to 100 and creates a proper URL for each page number.
         Returns a list of all URLs. """
         url_list = []
-        for i in range(START_PAGE, END_PAGE + 1):
+        for i in range(START_PAGE, self.end_page + 1):
             url_new = self._new_url(i)
             url_list.append(url_new)
         return url_list
