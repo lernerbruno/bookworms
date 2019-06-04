@@ -3,15 +3,15 @@ Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
 
 import csv
 import os
-from config_file import HEADER, OUTPUT_FILENAME
+from config_file import HEADER
 
 
 class Outputter:
     """Used to output the content to a specified file."""
 
-    def __init__(self, filename, file_type, quotes_objects):
+    def __init__(self, output_filename, file_type, quotes_objects):
         self.file_type = file_type
-        self.filename = OUTPUT_FILENAME + '.' + self.file_type
+        self.filename = output_filename + '.' + self.file_type
         self.quotes_objects = quotes_objects
 
     def write_file(self):

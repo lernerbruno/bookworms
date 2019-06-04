@@ -19,6 +19,3 @@ START_PAGE = 1  # the first page to be scraped
 # outputter
 HEADER = ['content', 'author', 'book_name', 'book_link', 'likes', 'tags',
           'img_url']
-
-# main
-OUTPUT_FILENAME = 'books_quotes'
