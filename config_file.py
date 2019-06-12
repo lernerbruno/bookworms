@@ -15,11 +15,7 @@ USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' \
              ' Safari/537.36'
 PAGE_INDICATOR = '?page='
 START_PAGE = 1  # the first page to be scraped
-END_PAGE = 5  # last page to be scraped
 
 # outputter
 HEADER = ['content', 'author', 'book_name', 'book_link', 'likes', 'tags',
           'img_url']
-
-# main
-OUTPUT_FILENAME = 'books_quotes'
