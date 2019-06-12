@@ -15,13 +15,11 @@ class Quote:
         self.html_quote = html_quote
         self.content = self._get_content()
         self.author = self._get_author()
-        self.book_name = self._get_book_name()
-        self.book_link = self._get_book_link()
+        self.book = self._get_book()
         self.likes = self._get_likes()
         self.tags = self._get_tags()
         self.picture_url = self._get_pic_url()
-        self.info = [self.content, self.author, self.book_name,
-                     self.book_link, self.likes, self.tags, self.picture_url]
+        self.info = [self.content, self.author, self.book, self.likes, self.tags, self.picture_url]
 
     def _get_content(self):
         """Gets the quote's content."""
@@ -36,22 +34,16 @@ class Quote:
         author = author.strip(AUTHOR_BLACKLIST)
         return author
 
-    def _get_book_name(self):
-        """Gets the book's name for an individual quote."""
+    def _get_book(self):
+        """Gets the book's info for an individual quote."""
+        book = {}
         book_html = self.html_quote.find('a', class_="authorOrTitle")
-        if book_html is None:
-            return 'No book mentioned'
-        else:
-            return book_html.text
 
-    def _get_book_link(self):
-        """Gets the book's link for an individual quote."""
-        book_html = self.html_quote.find('a', class_="authorOrTitle")
-        if book_html is None:
-            return 'No book mentioned'
-        else:
-            uri = book_html['href']
-            return Configurations.host + uri
+        if book_html is not None:
+            book['name'] = book_html.text
+            book['link'] = HOST + book_html['href']
+
+        return book
 
     def _get_likes(self):
         """Gets the number of likes for an individual quote."""
@@ -64,7 +56,8 @@ class Quote:
         """Gets the tags for an individual quote. Returns them as a list
         of strings."""
         tags_banner = self.html_quote.find('div', class_='quoteFooter')
-        tags_banner = self.html_quote.find('div', class_='greyText')
+        tags_banner = tags_banner.find('div', class_='greyText')
+
         if tags_banner is None:
             return 'No tags found.'
         tags_raw = tags_banner.find_all('a')
