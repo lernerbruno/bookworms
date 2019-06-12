@@ -3,9 +3,8 @@ Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
 
 import csv
 import os
-from config_file import HEADER
 from output import outputter
-from config_file import OUTPUT_FILENAME
+from config_file import Configurations
 
 
 class CSVOutputter(outputter.Outputter):
@@ -13,7 +12,7 @@ class CSVOutputter(outputter.Outputter):
 
     def __init__(self, quotes_objects):
         super().__init__(quotes_objects)
-        self.filename = OUTPUT_FILENAME + '.csv'
+        self.filename = Configurations.args.output_filename + '.csv'
 
     def write_output(self):
         """Writes the info of each entry to a csv file."""
@@ -22,6 +21,6 @@ class CSVOutputter(outputter.Outputter):
             csv_writer = csv.writer(csv_file)
             if os.stat(self.filename).st_size == 0:
                 # if the csv file needs a headers
-                csv_writer.writerow(HEADER)
+                csv_writer.writerow(Configurations.header)
             for quote in self.quotes_objects:
                 csv_writer.writerow(quote.info)
