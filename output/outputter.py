@@ -5,7 +5,7 @@ import abc
 
 
 class Outputter:
-    """Used to output the content to a specified file."""
+    """Abstract class that has some subclasses for outputting the content scrapped."""
 
     def __init__(self, quotes_objects):
         self.quotes_objects = quotes_objects

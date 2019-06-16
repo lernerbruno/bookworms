@@ -16,7 +16,7 @@ class Scraper:
         self.root_url = Configurations.root_url
         self.soup = None
         self.quotes_objects = []
-        self.end_page = args.max_pg
+        self.num_pg = args.num_pg
 
     def _get_page_content(self, url):
         """Pulls the whole url's HTML as string."""
@@ -52,7 +52,7 @@ class Scraper:
         from 1 to 100 and creates a proper URL for each page number.
         Returns a list of all URLs. """
         url_list = []
-        for i in range(Configurations.start_page, self.end_page + 1):
+        for i in range(Configurations.start_page, self.num_pg + 1):
             url_new = self._new_url(i)
             url_list.append(url_new)
         return url_list
