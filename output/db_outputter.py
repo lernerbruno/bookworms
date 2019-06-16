@@ -20,23 +20,24 @@ class DBOutputter(outputter.Outputter):
         for quote_object in self.quotes_objects:
             cur.execute("""
                 INSERT INTO authors (author_name, GR_author_id)
-                VALUES (%s, %d);""", quote_object.author['name'],
-                        quote_object.author['id'])
-            cur.execute("""
-                    INSERT INTO books (book_name, GR_book_id, author_id)
-                    VALUES (%s, %d, %d);""", quote_object.book['name'],
-                        quote_object.book['id'], quote_object.author['id'])
-            cur.execute("""
-                    SELECT author_id 
-                    FROM authors
-                    WHERE author_name=%s;""", quote_object.author['name'])
-            author_id = cur.fetchone()
-            cur.execute("""
-            INSERT INTO quotes (quote_content, likes, tags, author_id)
-            VALUES (%s, %d, %s, %d) 
-            ON DUPLICATE KEY UPDATE likes=%d;""",
-                        quote_object.content, quote_object.likes,
-                        quote_object.tags, author_id,
-                        quote_object.likes)
+                VALUES (%s, %d)
+            
+                SET @author_id = SCOPE_IDENTITY()
+                
+                INSERT INTO books (book_name, GR_book_id)
+                VALUES (%s, %d)
+            
+                SET @book_id = SCOPE_IDENTITY()
+                
+                INSERT INTO quotes (quote_content, likes, tags, author_id, book_id)
+                VALUES (%s, %d, $s ,@author_id, @book_id) 
+                ON DUPLICATE KEY UPDATE likes=%d
+            """, quote_object.author['name'], quote_object.author['id'],
+                    quote_object.book['name'], quote_object.book['id'],
+                    quote_object.content, quote_object.likes, str(quote_object.tags),
+                    quote_object.likes)
+            
+        # I dont think we are using this commit, but we could do a commit for each page,
+        #   so If a page has a problem, we would know which info we are lacking (TODO?)
         con.commit()
         con.close()
