@@ -4,21 +4,23 @@ Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
 import requests
 from bs4 import BeautifulSoup
 from quote import Quote
-from config_file import USER_AGENT, PAGE_INDICATOR, START_PAGE
+from config_file import Configurations
 
 
 class Scraper:
     """Used to scrape a 'goodreads' web page for its book quotes."""
 
-    def __init__(self, root_url, end_page):
-        self.root_url = root_url
+    def __init__(self):
+        args = Configurations.args
+
+        self.root_url = Configurations.root_url
         self.soup = None
         self.quotes_objects = []
-        self.end_page = end_page
+        self.num_pg = args.num_pg
 
     def _get_page_content(self, url):
         """Pulls the whole url's HTML as string."""
-        headers = {'user-agent': USER_AGENT}
+        headers = {'user-agent': Configurations.user_agent}
         r = requests.get(url, headers=headers)
         return r.text
 
@@ -42,7 +44,7 @@ class Scraper:
 
     def _new_url(self, page_num):
         """ Creates a proper URL containing the page number from the input. """
-        url_new = '%s%s%d' % (self.root_url, PAGE_INDICATOR, page_num)
+        url_new = '%s%s%d' % (self.root_url, Configurations.pg_indicator, page_num)
         return url_new
 
     def _get_url_list(self):
@@ -50,14 +52,14 @@ class Scraper:
         from 1 to 100 and creates a proper URL for each page number.
         Returns a list of all URLs. """
         url_list = []
-        for i in range(START_PAGE, self.end_page + 1):
+        for i in range(Configurations.start_page, self.num_pg + 1):
             url_new = self._new_url(i)
             url_list.append(url_new)
         return url_list
 
     def scrap(self):
         url_list = self._get_url_list()
-        current_page_num = START_PAGE
+        current_page_num = Configurations.start_page
         for url in url_list:
             self.soup = BeautifulSoup(self._get_page_content(url),
                                       'html.parser')

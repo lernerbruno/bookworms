@@ -1,8 +1,11 @@
 """A file containing the Quote class and its methods.
 Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
+from config_file import Configurations
 
-from config_file import CONTENT_BLACKLIST, AUTHOR_BLACKLIST, HOST, \
-    REPRESENTATION_FORMAT, QUOTES_REPR_SEPARATOR
+CONTENT_BLACKLIST = ' ”“'
+AUTHOR_BLACKLIST = "\n ,"
+REPRESENTATION_FORMAT = '%s: %s\n'
+QUOTES_REPR_SEPARATOR = '-----------------------------------\n'
 
 
 class Quote:
@@ -48,7 +51,7 @@ class Quote:
             return 'No book mentioned'
         else:
             uri = book_html['href']
-            return HOST + uri
+            return Configurations.host + uri
 
     def _get_likes(self):
         """Gets the number of likes for an individual quote."""
