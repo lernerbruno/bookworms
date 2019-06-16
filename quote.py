@@ -12,7 +12,6 @@ BOOK_ID_PATTERN = '/(\d*)$'
 AUTHOR_ID_PATTERN = '/(\d*)\.'
 
 
-
 class Quote:
     """Represents an individual quote and stores its relevant information."""
 
@@ -50,7 +49,6 @@ class Quote:
         """Gets the book's info for an individual quote."""
         book = {}
         book_html = self.html_quote.find('a', class_="authorOrTitle")
-
         if book_html is not None:
             book['name'] = book_html.text
 
@@ -58,7 +56,6 @@ class Quote:
             if match is not None:
                 book_id = match.group(1)
                 book['id'] = book_id
-
         return book
 
     def _get_likes(self):
