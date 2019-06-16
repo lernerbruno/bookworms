@@ -30,4 +30,6 @@ class Outputter:
                 # a headers
                 csv_writer.writerow(HEADER)
             for quote in self.quotes_objects:
+                if quote.language != 'en':      # if quote not in English, do not write it
+                    continue
                 csv_writer.writerow(quote.info)

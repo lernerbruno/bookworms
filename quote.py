@@ -3,6 +3,7 @@ Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
 
 from config_file import CONTENT_BLACKLIST, AUTHOR_BLACKLIST, HOST, \
     REPRESENTATION_FORMAT, QUOTES_REPR_SEPARATOR
+from langdetect import detect
 
 
 class Quote:
@@ -10,7 +11,7 @@ class Quote:
 
     def __init__(self, html_quote):
         self.html_quote = html_quote
-        self.content = self._get_content()
+        self.content, self.language = self._get_content()
         self.author = self._get_author()
         self.book = self._get_book()
         self.likes = self._get_likes()
@@ -19,10 +20,11 @@ class Quote:
         self.info = [self.content, self.author, self.book, self.likes, self.tags, self.picture_url]
 
     def _get_content(self):
-        """Gets the quote's content."""
+        """Gets the quote's content and the language it is in."""
         content = self.html_quote.find('div', class_="quoteText").contents[0]
         content = content.strip().strip(CONTENT_BLACKLIST)
-        return content
+        language = detect(content)      #using it from the langdetect package
+        return content, language
 
     def _get_author(self):
         """Gets the name of the author for an individual quote."""
