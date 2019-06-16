@@ -68,6 +68,7 @@ class Quote:
     def __repr__(self):
         info = {
             'Content': self.content,
+            'Language': self.language,
             'Author': self.author,
             'Book name': self.book_name,
             'Book link': self.book_link,
