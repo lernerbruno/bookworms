@@ -1,7 +1,7 @@
 """A file containing the Quote class and its methods.
 Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
 from config_file import Configurations
-from langdetect import detect
+# from langdetect import detect
 import re
 
 CONTENT_BLACKLIST = ' ”“'

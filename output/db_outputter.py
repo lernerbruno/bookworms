@@ -20,14 +20,14 @@ class DBOutputter(outputter.Outputter):
         for quote_object in self.quotes_objects:
             cur.execute("""
                 INSERT INTO authors (author_name, GR_author_id)
-                VALUES (%s, %d)
+                VALUES (%s, %s)
             
-                SET @author_id = SCOPE_IDENTITY()
+                SET @author_id = LAST_INSERT_ID()
                 
                 INSERT INTO books (book_name, GR_book_id)
                 VALUES (%s, %d)
             
-                SET @book_id = SCOPE_IDENTITY()
+                SET @book_id = LAST_INSERT_ID()
                 
                 INSERT INTO quotes (quote_content, likes, tags, author_id, book_id)
                 VALUES (%s, %d, $s ,@author_id, @book_id) 
@@ -36,7 +36,7 @@ class DBOutputter(outputter.Outputter):
                     quote_object.book['name'], quote_object.book['id'],
                     quote_object.content, quote_object.likes, str(quote_object.tags),
                     quote_object.likes)
-            
+
         # I dont think we are using this commit, but we could do a commit for each page,
         #   so If a page has a problem, we would know which info we are lacking (TODO?)
         con.commit()
