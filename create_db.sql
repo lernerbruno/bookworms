@@ -18,12 +18,12 @@ CREATE TABLE IF NOT EXISTS book_quotes.books (
   
 CREATE TABLE IF NOT EXISTS book_quotes.quotes (
   quote_id INT(255) NOT NULL AUTO_INCREMENT,
-  quote_content VARCHAR(255) NOT NULL,
+  quote_content TEXT NOT NULL,
   likes INT(255),
-  tags VARCHAR(255),
+  tags TEXT,
   author_id INT(255),
   book_id INT(255),
   PRIMARY KEY (quote_id),
   FOREIGN KEY (author_id) REFERENCES authors(author_id),
   FOREIGN KEY (book_id) REFERENCES books(book_id),
-  UNIQUE INDEX (quote_id, quote_content));
+  UNIQUE INDEX (quote_id, quote_content(100)));

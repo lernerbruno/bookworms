@@ -22,15 +22,15 @@ class DBOutputter(outputter.Outputter):
                 continue
 
             # I think this following approach is better, but something is wrong, need to debug
-
+            #
             # cur.execute("""
             #     INSERT INTO authors (author_name, GR_author_id)
-            #     VALUES ('{}', {});
+            #     VALUES ("{}", {});
             #
             #     SET @author_id = LAST_INSERT_ID();
             #
             #     INSERT INTO books (book_name, GR_book_id)
-            #     VALUES ('{}', {});
+            #     VALUES ("{}", {});
             #
             #     SET @book_id = LAST_INSERT_ID();
             #
@@ -44,7 +44,7 @@ class DBOutputter(outputter.Outputter):
 
             cur.execute("""
                    INSERT INTO authors (author_name, GR_author_id)
-                   VALUES ('{}', {});""".format(quote_object.author['name'],
+                   VALUES ("{}", {});""".format(quote_object.author['name'],
                                                 quote_object.author['id']))
 
             cur.execute("""
@@ -53,7 +53,7 @@ class DBOutputter(outputter.Outputter):
 
             cur.execute("""
                    INSERT INTO books (book_name, GR_book_id)
-                   VALUES ('{}', {});""".format(quote_object.book['name'],
+                   VALUES ("{}", {});""".format(quote_object.book['name'],
                                                 quote_object.book['id']))
 
             cur.execute("""
@@ -62,8 +62,9 @@ class DBOutputter(outputter.Outputter):
 
             cur.execute("""
                    INSERT INTO quotes (quote_content, likes, tags, author_id, book_id)
-                   VALUES ('{}', {}, '{}', {}, {})
-                   ON DUPLICATE KEY UPDATE likes={};""".format(quote_object.content, quote_object.likes,
+                   VALUES ("{}", {}, "{}", {}, {})
+                   ON DUPLICATE KEY UPDATE likes={};""".format(quote_object.content.replace('"', '\\"'),
+                                                               quote_object.likes,
                                                                str(quote_object.tags), author_id, book_id,
                                                                quote_object.likes))
 
