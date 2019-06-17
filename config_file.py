@@ -14,7 +14,6 @@ class Configurations:
         parser = argparse.ArgumentParser(description='Insert a description here later')  # TODO describe the parser
 
         # optional args
-        parser.add_argument('-s', '--show_output', action='store_true', help='Prints results in CLI.')
         parser.add_argument('-o', '--output_filename', default='books_quotes',
                             help='Define an output file. If existent, appends.')
         parser.add_argument('-num_pg', type=int, default=5, choices=range(1, 101),
