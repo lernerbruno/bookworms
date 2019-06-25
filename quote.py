@@ -1,6 +1,6 @@
 """A file containing the Quote class and its methods.
 Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
-from langdetect import detect
+from langdetect import detect, lang_detect_exception
 import re
 
 CONTENT_BLACKLIST = ' ""'
@@ -27,7 +27,11 @@ class Quote:
         """Gets the quote's content and the language it is in."""
         content = self.html_quote.find('div', class_="quoteText").contents[0]
         content = content.strip().strip(CONTENT_BLACKLIST)
-        language = detect(content)  # using it from the langdetect package
+        try:
+            language = detect(content)
+        except lang_detect_exception.LangDetectException:
+            language = 'undefined'
+
         return content, language
 
     def _get_author(self):

@@ -35,8 +35,7 @@ CREATE TABLE IF NOT EXISTS book_quotes.tags (
   UNIQUE INDEX (tag_name));
 
 CREATE TABLE IF NOT EXISTS book_quotes.quote_tags (
-  id NOT NULL AUTO_INCREMENT
+  id INT(255) NOT NULL AUTO_INCREMENT,
   quote_id INT(255) NOT NULL,
   tag_id INT(255) NOT NULL,
-  PRIMARY KEY (id),
-  );
+  PRIMARY KEY (id));

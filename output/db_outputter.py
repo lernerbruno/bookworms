@@ -21,24 +21,30 @@ class DBOutputter(outputter.Outputter):
             if quote_object.language != 'en':
                 continue
 
-            cur.execute("""
-                   INSERT INTO authors (author_name, GR_author_id)
-                   VALUES ("{}", {});""".format(quote_object.author['name'],
-                                                quote_object.author['id']))
+            try:
+                cur.execute("""
+                       INSERT INTO authors (author_name, GR_author_id)
+                       VALUES ("{}", {});""".format(quote_object.author['name'],
+                                                    quote_object.author['id']))
+            except pymysql.err.IntegrityError:
+                print("Found an existing author")
 
             cur.execute("""
                    SELECT author_id FROM authors 
-                   WHERE author_name = {};""".format(quote_object.author['name']))
+                   WHERE author_name = "{}";""".format(quote_object.author['name']))
             author_id = cur.fetchone()[0]
 
-            cur.execute("""
-                   INSERT INTO books (book_name, GR_book_id)
-                   VALUES ("{}", {});""".format(quote_object.book['name'],
-                                                quote_object.book['id']))
-
+            try:
+                cur.execute("""
+                       INSERT INTO books (book_name, GR_book_id)
+                       VALUES ("{}", {});""".format(quote_object.book['name'],
+                                                    quote_object.book['id']))
+            except pymysql.err.IntegrityError:
+                print("Found an existing book")
+                
             cur.execute("""
                    SELECT book_id FROM books
-                   WHERE book_name = {};""".format(quote_object.book['name']))
+                   WHERE book_name = "{}";""".format(quote_object.book['name']))
             book_id = cur.fetchone()[0]
 
             cur.execute("""
@@ -54,18 +60,21 @@ class DBOutputter(outputter.Outputter):
             quote_id = cur.fetchone()[0]
 
             for tag in quote_object.tags:
-                cur.execute("""
-                       INSERT INTO tags (tag_name)
-                       VALUES ("{}");""".format(tag))
+                try:
+                    cur.execute("""
+                           INSERT INTO tags (tag_name)
+                           VALUES ("{}");""".format(tag))
+                except pymysql.err.IntegrityError:
+                    print("Found an existing tag")
+                finally:
+                    cur.execute("""
+                           SELECT tag_id FROM tags
+                           WHERE tag_name = "{}";""".format(tag))
+                    tag_id = cur.fetchone()[0]
 
-                cur.execute("""
-                       SELECT tag_id FROM tags
-                       WHERE tag_name = {};""".format(tag))
-                tag_id = cur.fetchone()[0]
-
-                cur.execute("""
-                       INSERT INTO quote_tags (quote_id,tag_id)
-                       VALUES ({}, {});""".format(quote_id, tag_id))
+                    cur.execute("""
+                           INSERT INTO quote_tags (quote_id,tag_id)
+                           VALUES ({}, {});""".format(quote_id, tag_id))
 
         # I dont think we are using this commit, but we could do a commit for each page,
         #   so If a page has a problem, we would know which info we are lacking (TODO?)
