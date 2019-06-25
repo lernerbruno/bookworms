@@ -3,7 +3,7 @@ Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
 from langdetect import detect
 import re
 
-CONTENT_BLACKLIST = ' ”“'
+CONTENT_BLACKLIST = ' ""'
 AUTHOR_BLACKLIST = "\n ,"
 REPRESENTATION_FORMAT = '%s: %s\n'
 QUOTES_REPR_SEPARATOR = '-----------------------------------\n'
