@@ -10,7 +10,7 @@ QUOTES_REPR_SEPARATOR = '-----------------------------------\n'
 BOOK_ID_PATTERN = '/(\d*)$'
 AUTHOR_ID_PATTERN = '/(\d*)\.'
 
-
+# and
 class Quote:
     """Represents an individual quote and stores its relevant information."""
 
