@@ -36,12 +36,10 @@ class Quote:
 
         return content, language
 
-
     def _clean_content(self, content):
         content = content.strip(CONTENT_BLACKLIST)
         content = content.replace('"', '\\"')
         return content
-
 
     def _get_author(self):
         """Gets the name of the author for an individual quote."""
@@ -89,7 +87,7 @@ class Quote:
         tags_raw = tags_banner.find_all('a')
         tags = []
         for tag in tags_raw:  # cleaning the html strings
-            tags.append(tag.text)
+            tags.append(tag.text.lower())
         return tags
 
     def __repr__(self):
