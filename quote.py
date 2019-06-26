@@ -2,6 +2,7 @@
 Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
 from langdetect import detect, lang_detect_exception
 import re
+from data_enricher import Data_Enricher
 
 CONTENT_BLACKLIST = ' ""'
 AUTHOR_BLACKLIST = "\n ,"
@@ -21,7 +22,8 @@ class Quote:
         self.book = self._get_book()
         self.likes = self._get_likes()
         self.tags = self._get_tags()
-        self.info = [self.content, self.author, self.book, self.likes, self.tags]
+        self.api_data = self._enrich()
+        self.info = [self.content, self.author, self.book, self.likes, self.tags, self.api_data]
 
     def _get_content(self):
         """Gets the quote's content and the language it is in."""
@@ -89,6 +91,14 @@ class Quote:
         for tag in tags_raw:  # cleaning the html strings
             tags.append(tag.text.lower())
         return tags
+
+    def _enrich(self):
+        if self.language != 'en':
+            return {}
+
+        extra_data = Data_Enricher.request(self.author.name)
+
+        return extra_data
 
     def __repr__(self):
         info = {

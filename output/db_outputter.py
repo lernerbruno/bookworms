@@ -23,9 +23,11 @@ class DBOutputter(outputter.Outputter):
 
             try:
                 cur.execute("""
-                       INSERT INTO authors (author_name, GR_author_id)
-                       VALUES ("{}", {});""".format(quote_object.author['name'],
-                                                    quote_object.author['id']))
+                       INSERT INTO authors (author_name, GR_author_id, gender, year_of_birth, ethnic_group, country)
+                       VALUES ("{}", {}, "{}", {}, "{}", "{}");""".format(quote_object.author['name'],
+                                                    quote_object.author['id'], quote_object.api_data['gender'],
+                                                    quote_object.api_data['year_of_birth'], quote_object.api_data['ethnic_group'],
+                                                    quote_object.api_data['country']))
             except pymysql.err.IntegrityError:
                 print("Found an existing author")
 

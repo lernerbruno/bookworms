@@ -6,6 +6,10 @@ CREATE TABLE IF NOT EXISTS book_quotes.authors (
   author_id INT(255) NOT NULL AUTO_INCREMENT,
   author_name VARCHAR(255) NOT NULL,
   GR_author_id INT(255),
+  gender VARCHAR(100),
+  year_of_birth INT(255),
+  ethnic_group VARCHAR(255),
+  country VARCHAR(255),
   PRIMARY KEY (author_id),
   UNIQUE INDEX (author_name, GR_author_id));
   
