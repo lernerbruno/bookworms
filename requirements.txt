@@ -1,0 +1,6 @@
+beautifulsoup4==4.7.1
+langdetect==1.0.7
+PyMySQL==0.9.3
+requests==2.22.0
+soupsieve==1.8
+urllib3==1.24.2
