@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS book_quotes.authors (
   author_name VARCHAR(255) NOT NULL,
   GR_author_id INT(255),
   PRIMARY KEY (author_id),
-  UNIQUE INDEX (author_name));
+  UNIQUE INDEX (author_name, GR_author_id));
   
 CREATE TABLE IF NOT EXISTS book_quotes.books (
   book_id INT(255) NOT NULL AUTO_INCREMENT,
@@ -38,4 +38,6 @@ CREATE TABLE IF NOT EXISTS book_quotes.quote_tags (
   id INT(255) NOT NULL AUTO_INCREMENT,
   quote_id INT(255) NOT NULL,
   tag_id INT(255) NOT NULL,
+  FOREIGN KEY (quote_id) REFERENCES quotes(quote_id),
+  FOREIGN KEY (tag_id) REFERENCES tags(tag_id),
   PRIMARY KEY (id));
