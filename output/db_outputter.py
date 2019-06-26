@@ -41,23 +41,35 @@ class DBOutputter(outputter.Outputter):
                                                     quote_object.book['id']))
             except pymysql.err.IntegrityError:
                 print("Found an existing book")
-                
+
             cur.execute("""
                    SELECT book_id FROM books
                    WHERE book_name = "{}";""".format(quote_object.book['name']))
             book_id = cur.fetchone()[0]
 
-            cur.execute("""
-                   INSERT INTO quotes (quote_content, likes, author_id, book_id)
-                   VALUES ("{}", {}, {}, {})
-                   ON DUPLICATE KEY UPDATE likes={};""".format(quote_object.content.replace('"', '\\"'),
-                                                               quote_object.likes,
-                                                               author_id, book_id,
-                                                               quote_object.likes))
-            cur.execute("""
-                   SELECT quote_id FROM quotes
-                   WHERE quote_content like "{}%";""".format(quote_object.content[:100]))
-            quote_id = cur.fetchone()[0]
+            try:
+                cur.execute("""
+                       INSERT INTO quotes (quote_content, likes, author_id, book_id)
+                       VALUES ("{}", {}, {}, {})
+                       ON DUPLICATE KEY UPDATE likes={};""".format(quote_object.content,
+                                                                   quote_object.likes,
+                                                                   author_id, book_id,
+                                                                   quote_object.likes))
+
+            except pymysql.err.IntegrityError:
+                print("Found an existing quote")
+
+            try:
+                cur.execute("""
+                       SELECT quote_id FROM quotes
+                       WHERE quote_content like "{}%";""".format(quote_object.content[:100]))
+                quote_id = cur.fetchone()[0]
+
+            except pymysql.err.ProgrammingError:
+                print(
+                    "Error in Syntax (probably because some strange char in content)\
+                     when looking for quote_id\nContent:\n")
+                print(quote_object.content[:100])
 
             for tag in quote_object.tags:
                 try:
