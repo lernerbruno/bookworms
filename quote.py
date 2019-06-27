@@ -23,7 +23,8 @@ class Quote:
         self.likes = self._get_likes()
         self.tags = self._get_tags()
         self.api_data = self._enrich()
-        self.info = [self.content, self.author, self.book, self.likes, self.tags, self.api_data]
+        self.info = [self.content, self.author, self.book, self.likes,
+                     self.tags, self.api_data]
 
     def _get_content(self):
         """Gets the quote's content and the language it is in."""
@@ -47,7 +48,9 @@ class Quote:
         """Gets the name of the author for an individual quote."""
         author = {'id': 0, 'name': ''}
         text_div = self.html_quote.find('div', class_="quoteText")
-        author['name'] = text_div.find('span', class_="authorOrTitle").text.strip(AUTHOR_BLACKLIST)
+        author['name'] = text_div.find('span',
+                                       class_="authorOrTitle").text.strip(
+            AUTHOR_BLACKLIST)
 
         pic_html = self.html_quote.find('img')
         if pic_html is not None:
@@ -96,7 +99,7 @@ class Quote:
         if self.language != 'en':
             return {}
 
-        extra_data = Data_Enricher.request(self.author.name)
+        extra_data = DataEnricher.get_extra_data(self.author['name'])
 
         return extra_data
 
@@ -104,10 +107,10 @@ class Quote:
         info = {
             'Content': self.content,
             'Language': self.language,
-            'Author': self.author.name,
-            'Author Id': self.author.id,
-            'Book name': self.book.name,
-            'Book link': self.book.id,
+            'Author': self.author['name'],
+            'Author Id': self.author['id'],
+            'Book name': self.book['name'],
+            'Book link': self.book['id'],
             'Likes': self.likes,
             'Tags': self.tags
         }

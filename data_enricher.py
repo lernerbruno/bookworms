@@ -10,53 +10,67 @@ class DataEnricher:
     """Enriches the data with Wikipedia information about the author. Return
     the author's year of birth, gender, ethnic group and country of
     nationality. """
+    PROP_NAME = 0
+    PROP_NUM = 1
+    WIKI_API_URL = r'https://en.wikipedia.org/w/api.php?action' \
+                   r'=query&prop=pageprops&ppprop=wikibase_item' \
+                   r'&redirects=1&format=json&titles='
+    WIKIDATA_API_URL = r'https://www.wikidata.org/w/api.php?action=' \
+                       r'wbgetclaims&format=json&property={}&entity={}'
+    WIKIDATA_URL = 'https://www.wikidata.org/wiki/'
 
     def __init__(self):
-        self.PROP_NAME = 0
-        self.PROP_NUM = 1
+        pass
 
-    def get_properties(self, author_name):
+    @classmethod
+    def get_extra_data(cls, author_name):
+        """Fetches information about the author from Wikidata API, returning a
+        dictionary."""
         try:
-            data_id = self.get_data_id(author_name)
+            data_id = cls._get_data_id(author_name)
         except KeyError:
-            return {}
+            return {'year': 'None', 'gender': 'None', 'ethnic_group': 'None',
+                    'country': 'None'}
         properties = [('year', 'P569'),
                       ('gender', 'P21'),
                       ('ethnic_group', 'P172'),
                       ('country', 'P27')]
         author_props = {}
         for prop in properties:
-            result = self.get_prop_info(data_id, prop)
-            author_props[prop[self.PROP_NAME]] = result
+            result = cls._get_prop_info(data_id, prop)
+            author_props[prop[cls.PROP_NAME]] = result
         return author_props
 
-    def get_data_id(self, author_name):
-        ROOT_URL = r'https://en.wikipedia.org/w/api.php?action=query&prop=' \
-                   r'pageprops&ppprop=wikibase_item&redirects=1&format=' \
-                   r'json&titles='
-        full_url = ''.join((ROOT_URL, author_name))
+    @classmethod
+    def _get_data_id(cls, author_name):
+        """Gets the Wikidata id for the author.
+        Look into the Wikidata API documentation for further information."""
+        full_url = ''.join((cls.WIKI_API_URL, author_name))
         raw = requests.get(full_url).text
         info_dict = json.loads(raw)['query']['pages']
         page_id = list(info_dict.keys())[0]
         data_id = info_dict[page_id]['pageprops']['wikibase_item']
         return data_id
 
-    def get_prop_info(self, data_id, prop):
-        ROOT_URL = r'https://www.wikidata.org/w/api.php?action=wbgetclaims' \
-                   r'&format=json&property={}&entity={}'
-        WIKIDATA_URL = 'https://www.wikidata.org/wiki/'
-        raw = requests.get(ROOT_URL.format(prop[self.PROP_NUM], data_id)).text
+    @classmethod
+    def _get_prop_info(cls, data_id, prop):
+        """Using the author Wikidata id, returns the info of the specified
+        property. """
+        raw = requests.get(
+            cls.WIKIDATA_API_URL.format(prop[cls.PROP_NUM], data_id)).text
         info_dict = json.loads(raw)['claims']
         if info_dict == {}:
             result = 'None'
-        if prop[self.PROP_NAME] == 'year':
-            birth_date = info_dict[prop[self.PROP_NUM]][0]["mainsnak"] \
+        elif prop[cls.PROP_NAME] == 'year':
+            birth_date = info_dict[prop[cls.PROP_NUM]][0]["mainsnak"] \
                 ["datavalue"]["value"]["time"]
-            result = birth_date[1:5]
+            result = birth_date[
+                     birth_date.index('+') + 1:birth_date.index('-')]
         else:
-            wiki_data_id = info_dict[prop[self.PROP_NUM]][0]["mainsnak"] \
+            wiki_data_id = info_dict[prop[cls.PROP_NUM]][0]["mainsnak"] \
                 ["datavalue"]["value"]["id"]
-            html = requests.get(''.join((WIKIDATA_URL, wiki_data_id))).text
+            html = requests.get(''.join((cls.WIKIDATA_URL,
+                                         wiki_data_id))).text
             soup = BeautifulSoup(html, 'lxml')
             result = soup.find('title').contents[0][:-11]
         return result
