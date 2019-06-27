@@ -64,8 +64,11 @@ class DataEnricher:
         elif prop[cls.PROP_NAME] == 'year':
             birth_date = info_dict[prop[cls.PROP_NUM]][0]["mainsnak"] \
                 ["datavalue"]["value"]["time"]
-            result = birth_date[
-                     birth_date.index('+') + 1:birth_date.index('-')]
+            try:
+                result = birth_date[
+                         birth_date.index('+') + 1:birth_date.index('-')]
+            except ValueError:      # If no year is found
+                result = 'None'
         else:
             wiki_data_id = info_dict[prop[cls.PROP_NUM]][0]["mainsnak"] \
                 ["datavalue"]["value"]["id"]
