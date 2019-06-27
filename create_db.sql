@@ -24,7 +24,6 @@ create TABLE IF NOT EXISTS book_quotes.quotes (
   quote_id INT(255) NOT NULL AUTO_INCREMENT,
   quote_content TEXT NOT NULL,
   likes INT(255),
-  tags TEXT,
   author_id INT(255),
   book_id INT(255),
   PRIMARY KEY (quote_id),

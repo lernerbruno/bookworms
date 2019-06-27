@@ -32,13 +32,17 @@ class DBOutputter(outputter.Outputter):
                 print("Found an existing author")
 
             except pymysql.err.InternalError:
-                print("wtf happened?")
-                print(quote_object)
+                print("Found an existing author")
 
             cur.execute("""
                    SELECT author_id FROM authors 
                    WHERE author_name = "{}";""".format(quote_object.author['name']))
-            author_id = cur.fetchone()[0]
+
+            try:
+                author_id = cur.fetchone()[0]
+
+            except TypeError:
+                pass
 
             try:
                 cur.execute("""
@@ -70,6 +74,9 @@ class DBOutputter(outputter.Outputter):
                        SELECT quote_id FROM quotes
                        WHERE quote_content like "{}%";""".format(quote_object.content[:100]))
                 quote_id = cur.fetchone()[0]
+
+            except TypeError:
+                pass
 
             except pymysql.err.ProgrammingError:
                 print(
