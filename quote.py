@@ -2,7 +2,7 @@
 Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
 from langdetect import detect, lang_detect_exception
 import re
-from data_enricher import Data_Enricher
+from data_enricher import DataEnricher
 
 CONTENT_BLACKLIST = ' ""'
 AUTHOR_BLACKLIST = "\n ,"

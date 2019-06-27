@@ -60,8 +60,3 @@ class DataEnricher:
             soup = BeautifulSoup(html, 'lxml')
             result = soup.find('title').contents[0][:-11]
         return result
-
-
-author = 'Edgar Allan Poe'
-enricher = DataEnricher()
-print(enricher.get_properties(author))
