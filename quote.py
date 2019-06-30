@@ -46,7 +46,7 @@ class Quote:
 
     def _get_author(self):
         """Gets the name of the author for an individual quote."""
-        author = {'id': 0, 'name': ''}
+        author = {'id': None, 'name': None}
         text_div = self.html_quote.find('div', class_="quoteText")
         author['name'] = text_div.find('span',
                                        class_="authorOrTitle").text.strip(
@@ -62,7 +62,7 @@ class Quote:
 
     def _get_book(self):
         """Gets the book's info for an individual quote."""
-        book = {'id': 0, 'name': ''}
+        book = {'id': None, 'name': None}
         book_html = self.html_quote.find('a', class_="authorOrTitle")
         if book_html is not None:
             book['name'] = book_html.text
@@ -87,7 +87,7 @@ class Quote:
         tags_banner = tags_banner.find('div', class_='greyText')
 
         if tags_banner is None:
-            return 'No tags found'
+            return []
 
         tags_raw = tags_banner.find_all('a')
         tags = []
@@ -96,7 +96,7 @@ class Quote:
         return tags
 
     def _enrich(self):
-        if self.language != 'en':
+        if self.language != 'en' or self.author['name'] is None:
             return {}
 
         extra_data = DataEnricher.get_extra_data(self.author['name'])

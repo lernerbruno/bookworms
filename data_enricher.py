@@ -29,8 +29,8 @@ class DataEnricher:
         try:
             data_id = cls._get_data_id(author_name)
         except KeyError:
-            return {'year': 'None', 'gender': 'None', 'ethnic_group': 'None',
-                    'country': 'None'}
+            return {'year': None, 'gender': None, 'ethnic_group': None,
+                    'country': None}
         properties = [('year', 'P569'),
                       ('gender', 'P21'),
                       ('ethnic_group', 'P172'),
@@ -60,20 +60,20 @@ class DataEnricher:
             cls.WIKIDATA_API_URL.format(prop[cls.PROP_NUM], data_id)).text
         info_dict = json.loads(raw)['claims']
         if info_dict == {}:
-            result = 'None'
+            result = None
         elif prop[cls.PROP_NAME] == 'year':
             birth_date = info_dict[prop[cls.PROP_NUM]][0]["mainsnak"] \
                 ["datavalue"]["value"]["time"]
             try:
-                result = birth_date[
-                         birth_date.index('+') + 1:birth_date.index('-')]
+                result = int(birth_date[
+                         birth_date.index('+') + 1:birth_date.index('-')])
             except ValueError:      # If no year is found
-                result = 'None'
+                result = None
         else:
             wiki_data_id = info_dict[prop[cls.PROP_NUM]][0]["mainsnak"] \
                 ["datavalue"]["value"]["id"]
             html = requests.get(''.join((cls.WIKIDATA_URL,
                                          wiki_data_id))).text
-            soup = BeautifulSoup(html, 'lxml')
+            soup = BeautifulSoup(html, 'html.parser')
             result = soup.find('title').contents[0][:-11]
         return result
