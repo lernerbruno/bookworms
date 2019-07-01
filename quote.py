@@ -2,6 +2,7 @@
 Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
 from langdetect import detect, lang_detect_exception
 import re
+from data_enricher import DataEnricher
 
 CONTENT_BLACKLIST = ' ""'
 AUTHOR_BLACKLIST = "\n ,"
@@ -21,7 +22,9 @@ class Quote:
         self.book = self._get_book()
         self.likes = self._get_likes()
         self.tags = self._get_tags()
-        self.info = [self.content, self.author, self.book, self.likes, self.tags]
+        self.api_data = self._enrich()
+        self.info = [self.content, self.author, self.book, self.likes,
+                     self.tags, self.api_data]
 
     def _get_content(self):
         """Gets the quote's content and the language it is in."""
@@ -43,9 +46,11 @@ class Quote:
 
     def _get_author(self):
         """Gets the name of the author for an individual quote."""
-        author = {'id': 0, 'name': ''}
+        author = {'id': None, 'name': None}
         text_div = self.html_quote.find('div', class_="quoteText")
-        author['name'] = text_div.find('span', class_="authorOrTitle").text.strip(AUTHOR_BLACKLIST)
+        author['name'] = text_div.find('span',
+                                       class_="authorOrTitle").text.strip(
+            AUTHOR_BLACKLIST)
 
         pic_html = self.html_quote.find('img')
         if pic_html is not None:
@@ -57,7 +62,7 @@ class Quote:
 
     def _get_book(self):
         """Gets the book's info for an individual quote."""
-        book = {'id': 0, 'name': ''}
+        book = {'id': None, 'name': None}
         book_html = self.html_quote.find('a', class_="authorOrTitle")
         if book_html is not None:
             book['name'] = book_html.text
@@ -82,7 +87,7 @@ class Quote:
         tags_banner = tags_banner.find('div', class_='greyText')
 
         if tags_banner is None:
-            return 'No tags found'
+            return []
 
         tags_raw = tags_banner.find_all('a')
         tags = []
@@ -90,14 +95,22 @@ class Quote:
             tags.append(tag.text.lower())
         return tags
 
+    def _enrich(self):
+        if self.language != 'en' or self.author['name'] is None:
+            return {}
+
+        extra_data = DataEnricher.get_extra_data(self.author['name'])
+
+        return extra_data
+
     def __repr__(self):
         info = {
             'Content': self.content,
             'Language': self.language,
-            'Author': self.author.name,
-            'Author Id': self.author.id,
-            'Book name': self.book.name,
-            'Book link': self.book.id,
+            'Author': self.author['name'],
+            'Author Id': self.author['id'],
+            'Book name': self.book['name'],
+            'Book link': self.book['id'],
             'Likes': self.likes,
             'Tags': self.tags
         }
