@@ -3,6 +3,7 @@ Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
 
 from output import outputter
 import pymysql
+from config_file import Configurations
 
 
 class DBOutputter(outputter.Outputter):
@@ -12,10 +13,8 @@ class DBOutputter(outputter.Outputter):
         super().__init__(quotes_objects)
 
     def write_output(self):
-        username = input('Please enter your MySQL username: ')
-        password = input('Please enter your MySQL password: ')
         con = pymysql.connect(host='localhost', database='book_quotes',
-                              password=password, user=username)
+                              password=Configurations.args.password, user=Configurations.args.user)
         cur = con.cursor()
         for quote_object in self.quotes_objects:
             if quote_object.language != 'en':
