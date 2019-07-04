@@ -21,7 +21,7 @@ class DBOutputter(outputter.Outputter):
                 continue
 
             # If there is an author, we wanna save it in author's table
-            if quote_object.author['name'] is not None:
+            if quote_object.author['name'] is not None and quote_object.author['id'] is not None:
                 try:
                     cur.execute("""
                            INSERT INTO authors (author_name, GR_author_id, gender, year_of_birth, ethnic_group, country)
@@ -39,17 +39,22 @@ class DBOutputter(outputter.Outputter):
                     print(err)
 
                 finally:
-                    cur.execute("""
-                           SELECT author_id FROM authors 
-                           WHERE author_name like %s and GR_author_id = %s;""", (quote_object.author['name'], quote_object.author['id']))
+                    try:
+                        cur.execute("""
+                               SELECT author_id FROM authors 
+                               WHERE author_name like %s and GR_author_id = %s;""", (quote_object.author['name'], quote_object.author['id']))
 
-                    author_id = cur.fetchone()[0]
+                        author_id = cur.fetchone()[0]
+                    except TypeError:
+                        print("error on querying authors")
+                        print(quote_object.author['name'], quote_object.author['id'])
+                        print(quote_object)
 
             else:
                 author_id = None
 
             # If there is a book, we wanna save it in book's table
-            if quote_object.book['name'] is not None:
+            if quote_object.book['name'] is not None and quote_object.book['id'] is not None:
                 try:
                     cur.execute("""
                            INSERT INTO books (book_name, GR_book_id)
@@ -63,12 +68,16 @@ class DBOutputter(outputter.Outputter):
                     print("Some internal error")
                     print(err)
 
-                finally:
+                try:
                     cur.execute("""
                            SELECT book_id FROM books
                            WHERE book_name like %s;""", quote_object.book['name'])
 
                     book_id = cur.fetchone()[0]
+                except TypeError:
+                    print("error on querying books")
+                    print(quote_object.author['name'], quote_object.author['id'])
+                    print(quote_object)
             else:
                 book_id = None
 
@@ -91,6 +100,11 @@ class DBOutputter(outputter.Outputter):
                     "Error in Syntax (probably because some strange char in content)\
                      when looking for quote_id\nContent:\n")
                 print(quote_object.content[:100])
+
+            except TypeError:
+                print("error on querying quotes")
+                print(quote_object.author['name'], quote_object.author['id'])
+                print(quote_object)
 
             for tag in quote_object.tags:
                 try:
