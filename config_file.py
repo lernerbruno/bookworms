@@ -18,8 +18,12 @@ class Configurations:
                             help='Define an output file. If existent, appends.')
         parser.add_argument('-num_pg', type=int, default=5, choices=range(1, 101),
                             help='Define a maximum number of pages to scrape.')  # there is a maximum # of pgs available to scrape
-        parser.add_argument('-f', '--format', choices=['csv', 'db'], default='csv',
-                            help='Stores results in a file in the entered format.')  # TODO we can take out the default later
+        parser.add_argument('-f', '--format', choices=['csv', 'db'], default='db',
+                            help='Stores results in a file in the entered format.')
+        parser.add_argument('-u', '--user', default='ubuntu',
+                            help='User for MySQL database.')
+        parser.add_argument('-p', '--password', default='bookworms',
+                            help='Password for MySQL database')
 
         args = parser.parse_args()
         cls.args = args
