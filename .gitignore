@@ -108,3 +108,6 @@ venv.bak/
 
 # Output files
 *.csv
+
+private key
+*.pem
