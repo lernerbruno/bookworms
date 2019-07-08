@@ -4,9 +4,11 @@ Authors: Bruno Lerner, Doria Philo, Yuri Kaz"""
 from scraper import Scraper
 from output import csv_outputter, db_outputter
 from config_file import Configurations
+from datetime import datetime
 
 
 def main():
+    print(f'Start time: {datetime.now()}')
     print('Setting configurations ...')
     Configurations.parsing_args()
     Configurations.parsing_confs()
@@ -23,6 +25,8 @@ def main():
         output_writer = db_outputter.DBOutputter(quotes_objects)
 
     output_writer.write_output()
+
+    print(f'End time: {datetime.now()}')
 
 
 if __name__ == '__main__':

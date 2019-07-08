@@ -40,7 +40,7 @@ class Scraper:
         """This function holds the scraping workflow for 1 page."""
         quotes_elements = self._get_quotes_elements()
         self._create_quotes_objects(quotes_elements)
-        print("Scrapped page {}, it got {} quotes".format(page_num, len(quotes_elements)))
+        print("Scrapped page {}".format(page_num))
 
     def _new_url(self, page_num):
         """ Creates a proper URL containing the page number from the input. """
